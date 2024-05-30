@@ -1,0 +1,55 @@
+diff --git a/src/slic3r/GUI/HttpServer.hpp b/src/slic3r/GUI/HttpServer.hpp
+index 1f23fd9..734b67d 100644
+--- a/src/slic3r/GUI/HttpServer.hpp
++++ b/src/slic3r/GUI/HttpServer.hpp
+@@ -4,7 +4,7 @@
+ #include <iostream>
+ #include <mutex>
+ #include <stack>
+-
++#include <set>
+ #include <boost/beast/core.hpp>
+ #include <boost/beast/http.hpp>
+ #include <boost/beast/version.hpp>
+diff --git a/src/slic3r/GUI/Jobs/OAuthJob.cpp b/src/slic3r/GUI/Jobs/OAuthJob.cpp
+index 0a38fa6..7685300 100644
+--- a/src/slic3r/GUI/Jobs/OAuthJob.cpp
++++ b/src/slic3r/GUI/Jobs/OAuthJob.cpp
+@@ -1,6 +1,10 @@
+ #include "OAuthJob.hpp"
+ 
+ #include "Http.hpp"
++#include <thread>
++#include <boost/algorithm/string/predicate.hpp>
++#include <boost/log/core.hpp>
++#include <boost/log/trivial.hpp>
+ #include "ThreadSafeQueue.hpp"
+ #include "slic3r/GUI/I18N.hpp"
+ #include "nlohmann/json.hpp"
+@@ -40,7 +44,7 @@ void OAuthJob::process(Ctl& ctl)
+ 
+     // Setup auth server to receive OAuth code from callback url
+     local_authorization_server.set_request_handler([this, queue](const std::string& url) -> std::shared_ptr<HttpServer::Response> {
+-        if (boost::contains(url, "/callback")) {
++        if (boost::algorithm::contains(url, "/callback")) {
+             const auto code = url_get_param(url, "code");
+             const auto state = url_get_param(url, "state");
+ 
+diff --git a/src/slic3r/Utils/SimplyPrint.cpp b/src/slic3r/Utils/SimplyPrint.cpp
+index 9c5603c..7690905 100644
+--- a/src/slic3r/Utils/SimplyPrint.cpp
++++ b/src/slic3r/Utils/SimplyPrint.cpp
+@@ -2,7 +2,12 @@
+ 
+ #include <openssl/sha.h>
+ #include <boost/beast/core/detail/base64.hpp>
+-
++#include <boost/log/core.hpp>
++#include <boost/log/trivial.hpp>
++#include <boost/filesystem.hpp>
++#include <boost/nowide/iostream.hpp>
++#include <boost/nowide/fstream.hpp>
++#include <boost/nowide/cstdio.hpp>
+ #include "nlohmann/json.hpp"
+ #include "libslic3r/Utils.hpp"
+ #include "slic3r/GUI/I18N.hpp"
