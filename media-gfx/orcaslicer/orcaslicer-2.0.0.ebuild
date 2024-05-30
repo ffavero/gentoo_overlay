@@ -63,6 +63,7 @@ PATCHES=(
         "${FILESDIR}/${PN}-2.0.0_MeshBoolean_dyn_link_boost.patch"
         "${FILESDIR}/${PN}-2.0.0_missing_include.patch"
         "${FILESDIR}/${PN}-2.0.0_wxgtk3-wayland-fix.patch"
+        "${FILESDIR}/${PN}-2.0.0_skip_install_licence_file.patch"
 )
 
 src_configure() {
